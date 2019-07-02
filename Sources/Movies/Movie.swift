@@ -34,10 +34,13 @@ struct Movie {
         }
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC") // Assuming JSON dates are in UTC time
         guard let formatDate = dateFormatter.date(from: date) else {
             return nil
         }
-        dateFormatter.dateFormat = "MMM dd, yyyy"
+        dateFormatter.dateFormat = "MMM dd, yyyy h:mm a"
+        dateFormatter.calendar = NSCalendar.current
+        dateFormatter.timeZone = TimeZone.current
         return dateFormatter.string(from: formatDate)
     }
 }
