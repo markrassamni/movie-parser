@@ -10,12 +10,14 @@ import Foundation
 struct Movie {
     let title: String
     let year: Int?
-    let duration: Int
+    let duration: Int // Comes from JSON in miliseconds
     let uploadDate: String?
     
     func getFormattedDuration() -> String {
-        // TODO: Convert to xHr, yMin
-        return ""
+        let seconds = duration/1000
+        let hours = seconds / 3600
+        let minutes = (seconds % 3600) / 60
+        return "\(hours) Hr \(minutes) Min"
     }
     
     func getFormattedDate() -> String? {
