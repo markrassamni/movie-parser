@@ -11,7 +11,7 @@ struct Movie {
     
     let title: String
     let year: Int?
-    private let duration: Int // Comes from JSON in miliseconds
+    let duration: Int // Comes from JSON in miliseconds
     private let uploadDate: String?
     
     init(title: String, year: Int?, duration: Int, uploadDate: String?) {

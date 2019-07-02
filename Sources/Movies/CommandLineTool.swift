@@ -32,7 +32,11 @@ public final class CommandLineTool {
                 print("Failed to parse JSON. Please check that your input matches the format here: https://gist.githubusercontent.com/anothermh/72951911c70aa4e8d4f199406a0c5d8a/raw/039f37a6bdc15b922d5f17dfd5a0c3042be4420e/movies.json")
                 return
             }
-            self.displayMovies(movies)
+            guard let sortedMovies = self.sortMovies(movies) else {
+                print("Invalid sort argument provided. Use \"Movies -h\" for help.")
+                return
+            }
+            self.displayMovies(sortedMovies)
         }
     }
     
@@ -51,13 +55,52 @@ public final class CommandLineTool {
             print("Invalid URL. The URL must end with .json and be in JSON format.")
             return false
         }
-        // TODO: Validate flags
+        if arguments.count == 3 {
+            // Has sort argument
+            let sort = arguments[2]
+            if sort != "--sort=Title" && sort != "--sort=Year"  && sort != "--sort=Runtime"  && sort != "--sort=UploadDate" {
+                print("Invalid sort argument provided. Use \"Movies -h\" for help.")
+                return false
+            }
+        }
         return true
     }
     
     private func help() -> String{
         // TODO: Change to show usage and commands
         return "Enter the command \"Movies <url>\" to begin or \"Movies -h\" for help."
+    }
+    
+    /// Returns the properly sorted movies array or nil if an invalid sort parameter is detected
+    private func sortMovies(_ movies: [Movie]) -> [Movie]? {
+        guard arguments.count == 3 else {
+            return movies
+        }
+        let sortArgument = arguments[2]
+        switch sortArgument {
+        case "--sort=Title":
+            return movies.sorted(by: { (movie1, movie2) -> Bool in
+                // Alphabetic by title A-Z
+                return movie1.title < movie2.title
+            })
+        case "--sort=Year":
+            return movies.sorted(by: { (movie1, movie2) -> Bool in
+                // Newest to oldest year
+                return movie1.year ?? 0 > movie2.year ?? 0
+            })
+        case "--sort=Runtime":
+            return movies.sorted(by: { (movie1, movie2) -> Bool in
+                // Shortest to longest
+                return movie1.duration < movie2.duration
+            })
+        case "--sort=UploadDate":
+            return movies.sorted(by: { (movie1, movie2) -> Bool in
+                // Newest to oldest upload
+                return movie1.date ?? "" > movie2.date ?? ""
+            })
+        default:
+            return nil
+        }
     }
     
     private func displayMovies(_ movies: [Movie]) {
