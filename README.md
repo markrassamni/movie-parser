@@ -22,7 +22,10 @@ Disclaimer: You may need to have Xcode and Xcode developer tools installed to bu
 1. Clone the project
 2. `cd` into the project directory
 3. Run the command `swift build`
-4. You can then run the same commands as above as in this example: `.build/debug/Movies <url>`
+4. You can then run the same commands as above using one of the following: 
+`.build/debug/Movies <url>`
+or
+`swift run Movies <url>`
 
 ## Field Explanations
 ### Included Fields
