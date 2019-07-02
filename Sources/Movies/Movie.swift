@@ -43,4 +43,16 @@ struct Movie {
         dateFormatter.timeZone = TimeZone.current
         return dateFormatter.string(from: formatDate)
     }
+    
+    func displayFormat() -> String {
+        var output = ANSIColors.cyan + "Title: \(title)\n"
+        if let year = year {
+            output += ANSIColors.yellow + "Year Released: \(year)\n"
+        }
+        output += ANSIColors.red + "Runtime: \(runtime)"
+        if let date = date {
+            output += ANSIColors.magenta + "\nUpload Date: \(date)"
+        }
+        return output
+    }
 }
