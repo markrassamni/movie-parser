@@ -99,25 +99,41 @@ public final class CommandLineTool {
         guard arguments.count > 2 else {
             return movies
         }
-        let sortArgument = arguments[2]
-        switch sortArgument {
+        let reversed = arguments.count == 4 && arguments[3] == "-r"
+        switch arguments[2] {
         case "--sort=Title":
             return movies.sorted(by: { (movie1, movie2) -> Bool in
+                if reversed {
+                    // Reverse alphabetic by title Z-A
+                    return movie1.title > movie2.title
+                }
                 // Alphabetic by title A-Z
                 return movie1.title < movie2.title
             })
         case "--sort=Year":
             return movies.sorted(by: { (movie1, movie2) -> Bool in
+                if reversed {
+                    // Oldest to newest year
+                    return movie1.year ?? 0 < movie2.year ?? 0
+                }
                 // Newest to oldest year
                 return movie1.year ?? 0 > movie2.year ?? 0
             })
         case "--sort=Runtime":
             return movies.sorted(by: { (movie1, movie2) -> Bool in
+                if reversed {
+                    // Longest to shortest
+                    return movie1.duration > movie2.duration
+                }
                 // Shortest to longest
                 return movie1.duration < movie2.duration
             })
         case "--sort=UploadDate":
             return movies.sorted(by: { (movie1, movie2) -> Bool in
+                if reversed {
+                    // Oldest to newest upload
+                    return movie1.date ?? "" < movie2.date ?? ""
+                }
                 // Newest to oldest upload
                 return movie1.date ?? "" > movie2.date ?? ""
             })
