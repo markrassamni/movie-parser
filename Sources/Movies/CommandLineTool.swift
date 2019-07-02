@@ -67,8 +67,15 @@ public final class CommandLineTool {
     }
     
     private func help() -> String{
-        // TODO: Change to show usage and commands
-        return "Enter the command \"Movies <url>\" to begin or \"Movies -h\" for help."
+        return """
+            Usage:
+                Movies -h                               Show this help menu.
+                Movies <url>                            Load movies from provided URL containing valid JSON.
+                Movies <url> [--sort=Title]             Load movies sorted alphabetically by title.
+                Movies <url> [--sort=Year]              Load movies sorted by newest to oldest release date.
+                Movies <url> [--sort=Runtime]           Load movies sorted shortest to longest.
+                Movies <url> [--sort=UploadDate]        Load movies sorted by upload date, newest to oldest.
+        """
     }
     
     /// Returns the properly sorted movies array or nil if an invalid sort parameter is detected
