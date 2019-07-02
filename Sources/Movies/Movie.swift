@@ -8,19 +8,27 @@
 import Foundation
 
 struct Movie {
+    
     let title: String
     let year: Int?
-    let duration: Int // Comes from JSON in miliseconds
-    let uploadDate: String?
+    private let duration: Int // Comes from JSON in miliseconds
+    private let uploadDate: String?
     
-    func getFormattedDuration() -> String {
+    init(title: String, year: Int?, duration: Int, uploadDate: String?) {
+        self.title = title
+        self.year = year
+        self.duration = duration
+        self.uploadDate = uploadDate
+    }
+    
+    var runtime: String {
         let seconds = duration/1000
         let hours = seconds / 3600
         let minutes = (seconds % 3600) / 60
         return "\(hours) Hr \(minutes) Min"
     }
     
-    func getFormattedDate() -> String? {
+    var date: String? {
         guard let date = uploadDate else {
             return nil
         }
