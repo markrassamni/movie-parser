@@ -32,6 +32,7 @@ public final class CommandLineTool {
                 print("Failed to parse JSON. Please check that your input matches the format here: https://gist.githubusercontent.com/anothermh/72951911c70aa4e8d4f199406a0c5d8a/raw/039f37a6bdc15b922d5f17dfd5a0c3042be4420e/movies.json")
                 return
             }
+            self.displayMovies(movies)
         }
     }
     
@@ -57,5 +58,32 @@ public final class CommandLineTool {
     private func help() -> String{
         // TODO: Change to show usage and commands
         return "Enter the command \"Movies <url>\" to begin or \"Movies -h\" for help."
+    }
+    
+    private func displayMovies(_ movies: [Movie]) {
+        // Print pageSize(5) elements at a time until reaching the last movie
+        let pageSize = 5
+        var pagedIndex = 0
+        var allDisplayed = false
+        while !allDisplayed {
+            for index in pagedIndex..<pagedIndex + pageSize {
+                guard index < movies.count else {
+                    allDisplayed = true
+                    return
+                }
+                var output = movies[index].displayFormat()
+                if index < movies.count - 1 && index != pagedIndex + pageSize - 1 {
+                    output += "\n"
+                }
+                print(output)
+            }
+            pagedIndex += 5
+            if pagedIndex >= movies.count {
+                allDisplayed = true
+                return
+            }
+            // Wait for user to press enter before continuing to next page
+            let _ = readLine()
+        }
     }
 }
