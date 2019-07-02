@@ -19,6 +19,9 @@ public final class CommandLineTool {
     
     public func run() {
         guard validateInput() else { return }
+        NetworkManager.shared.getJSON(from: arguments[1]) { (json, error) in
+            
+        }
     }
     
     private func validateInput() -> Bool {
