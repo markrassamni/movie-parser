@@ -41,25 +41,38 @@ public final class CommandLineTool {
     }
     
     private func validateInput() -> Bool {
-        // If arg count is 1 then it is just "Movies"
-        guard arguments.count > 1, arguments[1] != "-h" else {
-            print(help())
-            return false
-        }
-        let url = arguments[1]
-        guard url.hasPrefix("http://") || url.hasPrefix("https://") else {
-            print("Invalid URL. The url must begin with http or https.")
-            return false
-        }
-        guard url.hasSuffix(".json") else {
-            print("Invalid URL. The URL must end with .json and be in JSON format.")
-            return false
-        }
-        if arguments.count == 3 {
-            // Has sort argument
-            let sort = arguments[2]
-            if sort != "--sort=Title" && sort != "--sort=Year"  && sort != "--sort=Runtime"  && sort != "--sort=UploadDate" {
-                print("Invalid sort argument provided. Use \"Movies -h\" for help.")
+        for (index, argument) in arguments.enumerated() {
+            switch index {
+            case 0:
+                if arguments.count == 1 {
+                    print("No arguments provided. Use \"Movies -h\" for help.")
+                    return false
+                }
+            case 1:
+                if argument == "-h" {
+                    print(help())
+                    return false
+                }
+                guard argument.hasPrefix("http://") || argument.hasPrefix("https://") else {
+                    print("Invalid URL. The url must begin with http or https.")
+                    return false
+                }
+                guard argument.hasSuffix(".json") else {
+                    print("Invalid URL. The URL must end with .json and be in JSON format.")
+                    return false
+                }
+            case 2:
+                if argument != "--sort=Title" && argument != "--sort=Year"  && argument != "--sort=Runtime"  && argument != "--sort=UploadDate" {
+                    print("Invalid sort argument provided. Use \"Movies -h\" for help.")
+                    return false
+                }
+            case 3:
+                if argument != "-r" {
+                    print("Invalid arguments. Use \"Movies -h\" for help.")
+                    return false
+                }
+            default:
+                print("Invalid arguments. Use \"Movies -h\" for help.")
                 return false
             }
         }
@@ -75,12 +88,15 @@ public final class CommandLineTool {
                 Movies <url> [--sort=Year]              Load movies sorted by newest to oldest release date.
                 Movies <url> [--sort=Runtime]           Load movies sorted shortest to longest.
                 Movies <url> [--sort=UploadDate]        Load movies sorted by upload date, newest to oldest.
+                Movies <url> <sort> -r                  Load movies using the provided sort in reverse order.
+        
+            Press enter to continue to the next page when viewing results.
         """
     }
     
     /// Returns the properly sorted movies array or nil if an invalid sort parameter is detected
     private func sortMovies(_ movies: [Movie]) -> [Movie]? {
-        guard arguments.count == 3 else {
+        guard arguments.count > 2 else {
             return movies
         }
         let sortArgument = arguments[2]
