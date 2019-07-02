@@ -1,1 +1,2 @@
-print("Hello, world!")
+let tool = CommandLineTool()
+tool.run()
