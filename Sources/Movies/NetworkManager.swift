@@ -17,7 +17,7 @@ public final class NetworkManager {
 
     func getJSON(from url: String, completion: @escaping (_ json: JSON?, _ error: String?) -> ()) {
         let runLoop = CFRunLoopGetCurrent() // Run loop keeps app alive while waiting for request
-         Alamofire.request(url).validate().responseJSON { response in
+        Alamofire.request(url).validate().responseJSON { response in
             switch response.result{
             case .failure(let error):
                 completion(nil, error.localizedDescription)

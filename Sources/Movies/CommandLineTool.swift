@@ -20,7 +20,18 @@ public final class CommandLineTool {
     public func run() {
         guard validateInput() else { return }
         NetworkManager.shared.getJSON(from: arguments[1]) { (json, error) in
-            
+            guard error == nil else {
+                print(error!)
+                return
+            }
+            guard let json = json else {
+                print("Failed to retreive JSON. Please verify that the inputted format is proper JSON.")
+                return
+            }
+            guard let movies = DataParser.shared.getMovies(from: json) else {
+                print("Failed to parse JSON. Please check that your input matches the format here: https://gist.githubusercontent.com/anothermh/72951911c70aa4e8d4f199406a0c5d8a/raw/039f37a6bdc15b922d5f17dfd5a0c3042be4420e/movies.json")
+                return
+            }
         }
     }
     
